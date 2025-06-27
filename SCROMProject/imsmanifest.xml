@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<manifest identifier="C7LxE_XJ0ltnplnv611RLvE4TR-rGDLqUumuk9gJ" version="1"
+  xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+  xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+                      http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+    <adlcp:location>metadata.xml</adlcp:location> 
+  </metadata>
+  <organizations default="articulate_rise">
+      <organization identifier="articulate_rise">
+      <title>Handling Guest Complaints Professionally at the Front Desk</title>
+      <item identifier="i1" identifierref="r1" isvisible="true">
+        <title>Handling Guest Complaints Professionally at the Front Desk</title>
+        <adlcp:datafromlms>eyJjcHYiOiJVdW11azlnSiIsInJsZCI6ZmFsc2V9</adlcp:datafromlms>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="r1" type="webcontent" adlcp:scormtype="sco" href="scormdriver/indexAPI.html">
+      <!-- SCORMDRIVER STUFF -->
+      <file href="scormdriver/indexAPI.html" />
+      <file href="scormdriver/preloadIntegrity.js" />
+      <file href="scormdriver/driverOptions.js" />
+      <file href="scormdriver/AICCComm.html" />
+      <file href="scormdriver/auto-scripts/AutoBookmark.js" />
+      <file href="scormdriver/auto-scripts/AutoCompleteSCO.js" />
+      <file href="scormdriver/auto-scripts/CourseExit.js" />
+      <file href="scormdriver/blank.html" />
+      <file href="scormdriver/goodbye.html" />
+      <file href="scormdriver/scormdriver.js" />
+      <file href="scormdriver/browsersniff.js" />
+
+      <!-- RUNTIME COMMON STUFF -->
+      <file href="scormcontent/index.html" />
+
+      
+        <file href="scormcontent/lib/fonts/icomoon.ttf"/>
+        <file href="scormcontent/lib/fonts/icomoon.woff"/>
+
+        <file href="scormcontent/lib/icomoon.css"/>
+        <file href="scormcontent/lib/player-0.0.11.min.js"/>
+        <file href="scormcontent/lib/lzwcompress.js"/>
+      
+
+      <!-- FRONTEND BUNDLE ASSETS -->
+      <file href="scormcontent/lib/rise/d561d94f.js" />
+      <file href="scormcontent/lib/rise/02ed395c.css" />
+      <file href="scormcontent/lib/rise/09bb7e6a.js" />
+      <file href="scormcontent/lib/rise/f25e95d6.css" />
+      <file href="scormcontent/lib/rise/ceabbbb3.js" />
+      <file href="scormcontent/lib/rise/254e83dc.js" />
+      <file href="scormcontent/lib/rise/c82cca6a.js" />
+      <file href="scormcontent/lib/rise/40b4cf18.js" />
+      <file href="scormcontent/lib/rise/b2cebec4.js" />
+      <file href="scormcontent/lib/rise/a607e3d7.js" />
+      <file href="scormcontent/lib/mondrian/entry.js" />
+      <file href="scormcontent/lib/mondrian/ab103845.js" />
+      <file href="scormcontent/lib/mondrian/b53105c0.js" />
+      <file href="scormcontent/lib/mondrian/0b26a33a.js" />
+      <file href="scormcontent/lib/mondrian/daeabcf0.js" />
+      <file href="scormcontent/lib/mondrian/9a5bc82a.js" />
+      <file href="scormcontent/lib/mondrian/09e37aee.js" />
+      <file href="scormcontent/lib/mondrian/196251cf.js" />
+      <file href="scormcontent/lib/sandbox/sandbox.html" />
+      <file href="scormcontent/lib/sandbox/b8fc6988.js" />
+      <file href="scormcontent/lib/sandbox/4adfab46.css" />
+
+
+      <!-- RUNTIME CONTENT STUFF -->
+      <file href="scormcontent/lib/fonts/Lato2-Regular.woff" />
+      <file href="scormcontent/lib/fonts/Lato2-Light.woff" />
+      <file href="scormcontent/lib/fonts/Lato2-Italic.woff" />
+      <file href="scormcontent/lib/fonts/Lato2-Bold.woff" />
+      <file href="scormcontent/lib/fonts/Lato2-Black.woff" />
+      <file href="scormcontent/lib/fonts/Merriweather-Black.woff" />
+      <file href="scormcontent/lib/fonts/Merriweather-Italic.woff" />
+      <file href="scormcontent/lib/fonts/Merriweather-Bold.woff" />
+      <file href="scormcontent/lib/fonts/Merriweather-Regular.woff" />
+      <file href="scormcontent/lib/fonts/Merriweather-Light.woff" />
+      <file href="scormcontent/assets/small_1706200004.png" />
+      <file href="scormcontent/assets/UTS_GhiBiaky0Z5Q.jpg" />
+      <file href="scormcontent/assets/a-hotel-front-desk-thank-the-guest-for-bringing-the-issue-to-your-attention.jpg" />
+      <file href="scormcontent/assets/a-hotel-front-desk-staff-thank-the-guest-for-bringing-the-issue-to-your-attention.jpg" />
+      <file href="scormcontent/assets/Handling-guest-complaints-at-the-front-desk-.jpg" />
+      <file href="scormcontent/assets/hotel-front-desk-staff.jpg" />
+      <file href="scormcontent/assets/a-front-desk-staff-acknowledge-their-concerns-with-empathy-and-understanding.jpg" />
+      <file href="scormcontent/assets/a-hotel-front-desk-staff-Listen-attentively-to-the-guest%27s-concerns.jpg" />
+      <file href="scormcontent/assets/a-front-desk-staff-Communicate-Clearly-and-Respectfully.jpg" />
+      <file href="scormcontent/assets/a-front-desk-staff-Maintain-a-calm-and-professional-demeanour-while-focusing-on-finding-a-solution.jpg" />
+      <file href="scormcontent/assets/a-front-desk-staff-thank-the-guest-for-bringing-the-issue-to-your-attention.jpg" />
+      <file href="scormcontent/assets/multicultural-hotel-staff.jpg" />
+      <file href="scormcontent/assets/Js8lXb/multicultural-hotel-staff.jpg" />
+      <file href="scormcontent/assets/hOqCAG/a-hotel-front-desk-staff-thank-the-guest-for-bringing-the-issue-to-your-attention.jpg" />
+      <file href="scormcontent/assets/hotel-policy-documents-and-guides-for-the-staff.jpg" />
+
+      <file href="scormcontent/locales/en.js" />
+      <file href="scormcontent/lib/chatbot/chatbot.js" />
+      <file href="scormcontent/lib/chatbot/chatbot.css" />
+    </resource>
+  </resources>
+</manifest>

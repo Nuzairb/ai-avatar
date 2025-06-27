@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" href="./favicon.ico" />
+    <title>AI Avatar Chatbot</title>
+  </head>
+
+  <body>
+    <div class="main">
+      <!-- Header -->
+      <div class="header">
+        <h1>🤖 AI Avatar Chatbot</h1>
+        <p>Experience the future of conversation with AI-powered avatars</p>
+      </div>
+
+      <!-- Avatar Configuration Panel -->
+      <div class="config-panel" id="configPanel">
+        <div class="config-row">
+          <label>
+            Avatar ID
+            <input id="avatarID" type="text" placeholder="Leave empty for default avatar" />
+          </label>
+          <label>
+            Voice ID  
+            <input id="voiceID" type="text" placeholder="Leave empty for default voice" />
+          </label>
+          <button id="toggleAvatarBtn" class="avatar-btn">Enable Avatar</button>
+        </div>
+      </div>
+
+      <!-- Chat Container -->
+      <div class="chat-container">
+        <!-- Avatar Video Section -->
+        <div class="avatar-section">
+          <div class="video-wrapper">
+            <video id="mediaElement" class="avatar-video hide" autoplay></video>
+            <canvas id="canvasElement" class="avatar-video hide"></canvas>
+            <div class="avatar-placeholder" id="avatarPlaceholder">
+              <div class="avatar-icon">🤖</div>
+              <p>Avatar Disabled</p>
+              <small>Enable avatar to see me speak!</small>
+            </div>
+          </div>
+          
+          <!-- Avatar Controls -->
+          <div class="avatar-controls hide" id="avatarControls">
+            <div class="switch-wrapper">
+              <span>Remove Background</span>
+              <label class="switch">
+                <input type="checkbox" id="removeBGCheckbox" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="status-indicator" id="avatarStatus">Disconnected</div>
+          </div>
+        </div>
+
+        <!-- Chat Messages Section -->
+        <div class="chat-section">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <p>Hello! I'm your intelligent AI assistant. I can chat with you via text, and if you enable the avatar, I can speak to you as well! What would you like to talk about?</p>
+                <small class="message-time">Just now</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input -->
+          <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+              <input 
+                type="text" 
+                id="chatInput" 
+                placeholder="Type your message here..."
+                autocomplete="off"
+              />
+              <button id="sendBtn" class="send-btn">
+                <span>Send</span>
+                <span class="send-icon">➤</span>
+              </button>
+            </div>
+            <div class="input-actions">
+              <small class="typing-indicator hide" id="typingIndicator">AI is thinking...</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Status -->
+      <div class="system-status" id="systemStatus">
+        <div class="status-item">
+          <span class="status-label">Chat:</span>
+          <span class="status-value" id="chatStatus">Ready</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Avatar:</span>
+          <span class="status-value" id="avatarStatusText">Disabled</span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
