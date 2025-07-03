@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Training Course with AI Assistant</title>
+    
+    <!-- SCORM Course Dependencies -->
+    <link type="text/css" rel="stylesheet" href="SCROMProject/scormcontent/lib/icomoon.css">
+    <script type="text/javascript" src="SCROMProject/scormcontent/lib/player-0.0.11.min.js"></script>
+    <script type="text/javascript" src="SCROMProject/scormcontent/lib/lzwcompress.js"></script>
+    
+    <style>
+        /* Main course container */
+        #course-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Ensure the chat widget stays on top */
+        #chat-widget-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        #chat-widget-container iframe {
+            border: none;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main SCORM course container -->
+    <iframe id="course-container" src="SCROMProject/scormcontent/index.html"></iframe>
+    
+    <!-- Chat widget container -->
+    <div id="chat-widget-container">
+        <iframe src="scorm-chat-widget.html" style="width:100%; height:100%; background:transparent;" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        // Initialize SCORM course
+        window.onload = function() {
+            // Forward SCORM API calls from the course iframe
+            window.API = window.parent.API || window.API;
+            window.API_1484_11 = window.parent.API_1484_11 || window.API_1484_11;
+        };
+    </script>
+</body>
+</html> 

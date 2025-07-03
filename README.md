@@ -4,12 +4,14 @@ A modern, interactive chatbot that combines AI conversation with real-time avata
 
 ## ✨ Features
 
-- **💬 Intelligent Chat**: Powered by OpenAI GPT-3.5 for natural conversations
+- **💬 Intelligent Chat**: Powered by OpenAI GPT-3.5 for natural conversations with smart fallback responses
 - **🎭 Interactive Avatar**: Real-time streaming avatar that speaks your responses
-- **🎨 Modern UI**: Beautiful, responsive chat interface
+- **🎨 Modern UI**: Beautiful, responsive chat interface with glassmorphism design
 - **🔄 Conversation Memory**: Maintains context throughout your chat session
 - **🖼️ Background Removal**: Advanced green screen removal for avatar
 - **📱 Mobile Friendly**: Works on desktop and mobile devices
+- **📚 SCORM Ready**: Complete LMS integration with progress tracking
+- **🏗️ Standalone Mode**: Self-contained version that works without server dependencies
 
 ## 🚀 Quick Start
 
@@ -46,6 +48,18 @@ A modern, interactive chatbot that combines AI conversation with real-time avata
    - Start chatting immediately!
 
 ## 🎮 How to Use
+
+### Server-Based Mode (Full Features)
+1. Start the server with `node server.js`
+2. Open `http://localhost:3000` in your browser
+3. Chat with AI-powered responses and optional avatar
+
+### Standalone Mode (LMS Deployment)
+1. Configure API keys in `scorm-standalone.html` file (see instructions in the file header)
+2. Open the file directly in any browser - no server required
+3. Automatic OpenAI and HeyGen integration once API keys are configured
+4. Smart fallback responses if API keys are not configured
+5. Perfect for LMS deployment and educational environments
 
 ### Text-Only Chat
 1. Simply type your message in the chat input
@@ -84,6 +98,40 @@ The HeyGen API key is already configured, but if you need to use your own:
 1. Get your API key from [HeyGen Settings](https://app.heygen.com/settings?nav=API)
 2. Open `index.js`
 3. Replace the API key in the `heygen_API` object
+
+### Standalone Mode API Configuration (SCORM)
+
+For the standalone SCORM version, both APIs are automatically integrated:
+
+**🔧 API Configuration Steps:**
+
+1. **Open `scorm-standalone.html` in a text editor**
+
+2. **Find the API_CONFIG section** (around line 275):
+   ```javascript
+   const API_CONFIG = {
+       openai: {
+           apiKey: 'sk-proj-your-openai-api-key-here', // Replace this
+           enabled: true
+       },
+       heygen: {
+           apiKey: 'your-heygen-api-key-here', // Replace this
+           enabled: true
+       }
+   };
+   ```
+
+3. **Replace with your actual API keys:**
+   - **OpenAI**: Get from https://platform.openai.com/api-keys
+   - **HeyGen**: Get from https://app.heygen.com/settings?nav=API
+
+4. **Save and deploy** - The chatbot will automatically use both APIs!
+
+**✅ Automatic Features:**
+- **No manual API key entry** - configured once in the code
+- **Automatic fallbacks** - smart responses if APIs fail
+- **Error handling** - graceful degradation to demo mode
+- **SCORM tracking** - full LMS integration maintained
 
 ## 🔧 Features Explained
 

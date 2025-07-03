@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.imsglobal.org/xsd/imsmd_v1p2" 
+          xmlns:adlmd="http://www.adlnet.org/xsd/adlmd_v1p3" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xsi:schemaLocation="http://www.imsglobal.org/xsd/imsmd_v1p2 imsmd_v1p2p4.xsd http://www.adlnet.org/xsd/adlmd_v1p3 adlmd_v1p3.xsd">
+
+  <general>
+    <identifier>
+      <catalog>AI_Avatar_Chatbot</catalog>
+      <entry>AI_CHATBOT_001</entry>
+    </identifier>
+    <title>
+      <langstring xml:lang="en">AI Avatar Chatbot Learning Experience</langstring>
+    </title>
+    <description>
+      <langstring xml:lang="en">An interactive AI-powered chatbot with avatar capabilities designed for engaging learner interactions. Features include natural language processing, visual avatar representation, and comprehensive tracking of learner engagement.</langstring>
+    </description>
+    <keyword>
+      <langstring xml:lang="en">AI, Chatbot, Avatar, Interactive Learning, Artificial Intelligence, Conversation</langstring>
+    </keyword>
+    <language>en</language>
+    <aggregationlevel>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">2</langstring>
+      </value>
+    </aggregationlevel>
+  </general>
+
+  <lifecycle>
+    <version>
+      <langstring xml:lang="en">1.0</langstring>
+    </version>
+    <status>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">final</langstring>
+      </value>
+    </status>
+    <contribute>
+      <role>
+        <source>
+          <langstring xml:lang="en">LOMv1.0</langstring>
+        </source>
+        <value>
+          <langstring xml:lang="en">author</langstring>
+        </value>
+      </role>
+      <entity>AI Avatar Chatbot Development Team</entity>
+      <date>
+        <datetime>2024-12-19</datetime>
+      </date>
+    </contribute>
+  </lifecycle>
+
+  <technical>
+    <format>text/html</format>
+    <size>5242880</size>
+    <location>scorm-launcher.html</location>
+    <requirement>
+      <orcomposite>
+        <type>
+          <source>
+            <langstring xml:lang="en">LOMv1.0</langstring>
+          </source>
+          <value>
+            <langstring xml:lang="en">browser</langstring>
+          </value>
+        </type>
+        <name>
+          <source>
+            <langstring xml:lang="en">LOMv1.0</langstring>
+          </source>
+          <value>
+            <langstring xml:lang="en">any</langstring>
+          </value>
+        </name>
+        <minimumversion>HTML5</minimumversion>
+      </orcomposite>
+    </requirement>
+    <installationremarks>
+      <langstring xml:lang="en">Requires modern web browser with JavaScript enabled and WebRTC support for avatar functionality.</langstring>
+    </installationremarks>
+    <otherplatformrequirements>
+      <langstring xml:lang="en">Internet connection required for AI processing and avatar streaming.</langstring>
+    </otherplatformrequirements>
+  </technical>
+
+  <educational>
+    <interactivitytype>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">active</langstring>
+      </value>
+    </interactivitytype>
+    <learningresourcetype>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">simulation</langstring>
+      </value>
+    </learningresourcetype>
+    <interactivitylevel>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">very high</langstring>
+      </value>
+    </interactivitylevel>
+    <semanticdensity>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">medium</langstring>
+      </value>
+    </semanticdensity>
+    <intendedenduserrole>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">learner</langstring>
+      </value>
+    </intendedenduserrole>
+    <context>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">training</langstring>
+      </value>
+    </context>
+    <typicalagerange>
+      <langstring xml:lang="en">16-99</langstring>
+    </typicalagerange>
+    <difficulty>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">easy</langstring>
+      </value>
+    </difficulty>
+    <typicallearningtime>
+      <datetime>PT30M</datetime>
+    </typicallearningtime>
+    <description>
+      <langstring xml:lang="en">Interactive chatbot experience for exploring AI conversation capabilities and avatar technology.</langstring>
+    </description>
+    <language>en</language>
+  </educational>
+
+  <rights>
+    <cost>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">no</langstring>
+      </value>
+    </cost>
+    <copyrightandotherrestrictions>
+      <source>
+        <langstring xml:lang="en">LOMv1.0</langstring>
+      </source>
+      <value>
+        <langstring xml:lang="en">yes</langstring>
+      </value>
+    </copyrightandotherrestrictions>
+    <description>
+      <langstring xml:lang="en">Copyright 2024. All rights reserved. Licensed for educational use.</langstring>
+    </description>
+  </rights>
+
+  <adlmd:mastery_score>80</adlmd:mastery_score>
+  <adlmd:max_time_allowed>PT60M</adlmd:max_time_allowed>
+  <adlmd:time_limit_action>exit,message</adlmd:time_limit_action>
+</metadata> 

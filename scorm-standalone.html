@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Avatar Chatbot - SCORM Edition</title>
+    
+    <!-- 
+    ====================================
+    API CONFIGURATION INSTRUCTIONS
+    ====================================
+    
+    To enable full functionality:
+    
+    1. OPENAI API KEY:
+       - Get your API key from: https://platform.openai.com/api-keys
+       - Replace 'sk-proj-your-openai-api-key-here' in the API_CONFIG section below
+    
+    2. HEYGEN API KEY:
+       - Get your API key from: https://app.heygen.com/settings?nav=API
+       - Replace 'your-heygen-api-key-here' in the API_CONFIG section below
+    
+    3. FIND THE API_CONFIG SECTION:
+       - Look for the JavaScript section that starts with "const API_CONFIG = {"
+       - Replace the placeholder values with your actual API keys
+    
+    Both integrations will work automatically once configured!
+    ====================================
+    -->
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary-color: #64748b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --radius: 8px;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .chat-toggle-btn:hover {
+            background: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .chat-popup {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 400px;
+            height: 600px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .chat-popup.open {
+            display: flex;
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .chat-popup-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .chat-popup-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .chat-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .chat-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-popup-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-section {
+            flex: 1;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .avatar-mini {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .avatar-video-mini {
+            width: 120px;
+            height: 90px;
+            border-radius: var(--radius);
+            background: #000;
+            margin: 0 auto 8px auto;
+            display: none;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder-mini {
+            width: 120px;
+            height: 90px;
+            border-radius: var(--radius);
+            background: #f8fafc;
+            border: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin: 0 auto 8px auto;
+        }
+
+        .avatar-controls-mini {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .avatar-toggle-mini {
+            padding: 4px 8px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .avatar-toggle-mini:hover {
+            background: var(--primary-light);
+        }
+
+        .status-mini {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #fafafa;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            min-height: 0;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            max-width: 75%;
+            transition: var(--transition);
+        }
+
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .ai-message {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .system-message {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            text-align: center;
+            margin: 12px auto;
+            max-width: 70%;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .message-time {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .user-message .message-header,
+        .user-message .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .message-content {
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .typing-indicator {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingDot {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .chat-input-section {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            padding: 0;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            resize: none;
+            min-height: 38px;
+            max-height: 80px;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .send-button {
+            padding: 10px 16px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            font-size: 0.85rem;
+        }
+
+        .send-button:hover {
+            background: var(--primary-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .send-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Hide main page content */
+        .main-page {
+            display: none;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .control-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .control-group {
+            margin-bottom: 16px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .control-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .switch {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background: var(--border);
+            border-radius: 11px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .switch input:checked + .slider {
+            transform: translateX(22px);
+        }
+
+        .switch:has(input:checked) {
+            background: var(--primary-color);
+        }
+
+        .avatar-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .avatar-video {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--radius);
+            background: #000;
+            margin-bottom: 12px;
+            display: none;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--radius);
+            background: #f8fafc;
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: var(--radius);
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .status.connecting {
+            background: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fcd34d;
+        }
+
+        .status.connected {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #6ee7b7;
+        }
+
+        .status.error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
+        .status.disconnected {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .scorm-status {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .score-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header {
+                margin-bottom: 20px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .chat-section {
+                min-height: 500px;
+                padding: 16px;
+            }
+
+            .chat-messages {
+                min-height: 400px;
+                max-height: 400px;
+                padding: 12px;
+            }
+
+            .avatar-video,
+            .avatar-placeholder {
+                height: 250px;
+            }
+
+            .message {
+                max-width: 85%;
+                padding: 12px 14px;
+            }
+
+            .control-panel {
+                padding: 16px;
+            }
+
+            .chat-popup {
+                bottom: 80px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                height: 70vh;
+                max-height: 500px;
+            }
+
+            .chat-toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .avatar-video-mini {
+                width: 100px;
+                height: 75px;
+            }
+
+            .avatar-placeholder-mini {
+                width: 100px;
+                height: 75px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-page">
+        <header class="header">
+            <h1>AI Avatar Chatbot</h1>
+            <p>Intelligent conversations with visual avatar support</p>
+            <p>Click the chat button in the bottom right to start!</p>
+        </header>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <!-- Chat Popup -->
+        <div id="chatPopup" class="chat-popup">
+            <div class="chat-popup-header">
+                <h3 class="chat-popup-title">AI Avatar Chatbot</h3>
+                <button id="chatCloseBtn" class="chat-close-btn">×</button>
+            </div>
+            
+            <div class="chat-popup-content">
+                <!-- Avatar Section -->
+                <div class="avatar-mini">
+                    <video id="avatarVideo" class="avatar-video-mini" autoplay playsinline></video>
+                    <div class="avatar-placeholder-mini">
+                        Avatar preview
+                    </div>
+                    <div class="avatar-controls-mini">
+                        <button id="avatarToggle" class="avatar-toggle-mini">Enable Avatar</button>
+                        <span id="connectionStatus" class="status-mini status disconnected">Offline</span>
+                    </div>
+                </div>
+
+                <!-- Chat Section -->
+                <div class="chat-section">
+                    <div class="chat-content">
+                        <div id="chatMessages" class="chat-messages"></div>
+                        
+                        <div class="chat-input-section">
+                            <textarea 
+                                id="chatInput" 
+                                class="chat-input" 
+                                placeholder="Type your message..."
+                                rows="1"
+                            ></textarea>
+                            <button id="sendBtn" class="send-button">Send</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden Controls -->
+                <input type="hidden" id="avatarId" value="josh_lite3_20230714" />
+                <input type="hidden" id="voiceId" value="2d5b0e6cf36f460aa7fc47e3eee4ba54" />
+                <input type="hidden" id="openaiToggle" checked />
+                <span id="engagementScore" style="display: none;">0%</span>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="chatToggleBtn" class="chat-toggle-btn">💬</button>
+    </div>
+
+    <script>
+        // SCORM API Integration
+        let scormAPI = null;
+        let isScormAvailable = false;
+
+        function findAPI(win) {
+            let attempts = 0;
+            while ((win.API_1484_11 == null) && (win.parent != null) && (win.parent != win)) {
+                attempts++;
+                if (attempts > 7) {
+                    return null;
+                }
+                win = win.parent;
+            }
+            return win.API_1484_11;
+        }
+
+        function initializeSCORM() {
+            try {
+                scormAPI = findAPI(window);
+                if (scormAPI == null) {
+                    console.log("SCORM API not found, running in standalone mode");
+                    return false;
+                }
+                
+                let result = scormAPI.Initialize("");
+                if (result === "true") {
+                    isScormAvailable = true;
+                    console.log("SCORM initialized successfully");
+                    
+                    // Set initial values
+                    scormAPI.SetValue("cmi.completion_status", "incomplete");
+                    scormAPI.SetValue("cmi.success_status", "unknown");
+                    scormAPI.SetValue("cmi.score.min", "0");
+                    scormAPI.SetValue("cmi.score.max", "100");
+                    scormAPI.Commit("");
+                    
+                    return true;
+                } else {
+                    console.log("SCORM initialization failed");
+                    return false;
+                }
+            } catch (error) {
+                console.log("SCORM error:", error);
+                return false;
+            }
+        }
+
+        function setSCORMValue(element, value) {
+            if (isScormAvailable && scormAPI) {
+                try {
+                    scormAPI.SetValue(element, value);
+                    scormAPI.Commit("");
+                } catch (error) {
+                    console.log("SCORM SetValue error:", error);
+                }
+            }
+        }
+
+        function terminateSCORM() {
+            if (isScormAvailable && scormAPI) {
+                try {
+                    scormAPI.Terminate("");
+                } catch (error) {
+                    console.log("SCORM Terminate error:", error);
+                }
+            }
+        }
+
+        // Fallback AI Responses
+        const fallbackResponses = {
+            greeting: [
+                "Hello! I'm your AI assistant. How can I help you today?",
+                "Hi there! Welcome to our chat. What would you like to know?",
+                "Greetings! I'm here to assist you with any questions you might have.",
+                "Hello! Nice to meet you. What can I help you with?"
+            ],
+            help: [
+                "I'm here to help! You can ask me questions about various topics, and I'll do my best to provide useful information.",
+                "I can assist you with information, answer questions, or just have a conversation. What would you like to explore?",
+                "Feel free to ask me anything! I'm designed to be helpful and informative.",
+                "I'm your AI assistant, ready to help with questions or provide information on topics you're interested in."
+            ],
+            general: [
+                "That's an interesting question! Let me think about that...",
+                "I understand what you're asking. Here's what I can tell you about that topic...",
+                "That's a great point! From what I know...",
+                "I appreciate your question. Based on the information I have...",
+                "Let me provide some insight on that topic...",
+                "That's something worth exploring. Here's my perspective...",
+                "I can help clarify that for you...",
+                "That's a thoughtful question. Let me share what I know..."
+            ],
+            learning: [
+                "Learning is a wonderful journey! What specific area would you like to explore?",
+                "Education is so important. I'm happy to help you learn about any topic that interests you.",
+                "I love helping people learn! What subject or skill are you curious about?",
+                "Knowledge is power! What would you like to discover today?"
+            ],
+            default: [
+                "I understand you're asking about that topic. While I don't have specific information at the moment, I'd be happy to discuss it further!",
+                "That's an interesting topic! I'd love to explore that with you more.",
+                "I appreciate your question. Even though I may not have all the details, let's discuss what we can explore together.",
+                "Thank you for that question! I'm always eager to learn and discuss new topics with you."
+            ]
+        };
+
+        function getSmartResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Greeting patterns
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') || 
+                lowerMessage.includes('good morning') || lowerMessage.includes('good afternoon')) {
+                return fallbackResponses.greeting[Math.floor(Math.random() * fallbackResponses.greeting.length)];
+            }
+            
+            // Help patterns
+            if (lowerMessage.includes('help') || lowerMessage.includes('assist') || lowerMessage.includes('support')) {
+                return fallbackResponses.help[Math.floor(Math.random() * fallbackResponses.help.length)];
+            }
+            
+            // Learning patterns
+            if (lowerMessage.includes('learn') || lowerMessage.includes('study') || lowerMessage.includes('teach') || 
+                lowerMessage.includes('education') || lowerMessage.includes('course')) {
+                return fallbackResponses.learning[Math.floor(Math.random() * fallbackResponses.learning.length)];
+            }
+            
+            // General knowledge patterns
+            if (lowerMessage.includes('what') || lowerMessage.includes('how') || lowerMessage.includes('why') || 
+                lowerMessage.includes('when') || lowerMessage.includes('where')) {
+                return fallbackResponses.general[Math.floor(Math.random() * fallbackResponses.general.length)];
+            }
+            
+            // Default response
+            return fallbackResponses.default[Math.floor(Math.random() * fallbackResponses.default.length)];
+        }
+
+        // API Configuration - Replace with your actual API keys
+        const API_CONFIG = {
+            openai: {
+                apiKey: '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', // Replace with your OpenAI API key
+                enabled: true
+            },
+            heygen: {
+                apiKey: 'ZjExYmFkODliMGQ4NDBjNmIzOTNiN2M0NTE4MTY2MmMtMTc1MDk1MjAyOA==', // Replace with your HeyGen API key
+                enabled: true
+            }
+        };
+
+        // Chatbot Implementation
+        class AvatarChatbot {
+            constructor() {
+                this.messages = [];
+                this.isAvatarEnabled = false;
+                this.sessionToken = null;
+                this.peerConnection = null;
+                this.videoElement = null;
+                this.isConnecting = false;
+                this.interactionCount = 0;
+                this.startTime = Date.now();
+                this.useOpenAI = API_CONFIG.openai.enabled;
+                this.openaiApiKey = API_CONFIG.openai.apiKey;
+                this.heygenApiKey = API_CONFIG.heygen.apiKey;
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.updateEngagementScore();
+                this.initializeServices();
+            }
+
+            initializeElements() {
+                this.chatMessages = document.getElementById('chatMessages');
+                this.chatInput = document.getElementById('chatInput');
+                this.sendButton = document.getElementById('sendBtn');
+                this.avatarToggle = document.getElementById('avatarToggle');
+                this.videoElement = document.getElementById('avatarVideo');
+                this.connectionStatus = document.getElementById('connectionStatus');
+                this.engagementScore = document.getElementById('engagementScore');
+                this.avatarIdInput = document.getElementById('avatarId');
+                this.voiceIdInput = document.getElementById('voiceId');
+            }
+
+            setupEventListeners() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+                
+                this.avatarToggle.addEventListener('click', () => {
+                    if (!this.isAvatarEnabled) {
+                        this.enableAvatar();
+                    } else {
+                        this.disableAvatar();
+                    }
+                });
+
+                const openaiToggle = document.getElementById('openaiToggle');
+                if (openaiToggle) {
+                    openaiToggle.addEventListener('change', (e) => {
+                        this.useOpenAI = e.target.checked && API_CONFIG.openai.enabled;
+                        if (this.useOpenAI) {
+                            this.addMessage('System', 'OpenAI integration enabled.', 'system');
+                        } else {
+                            this.addMessage('System', 'Using fallback responses.', 'system');
+                        }
+                    });
+                }
+            }
+
+            initializeServices() {
+                // Initialize OpenAI
+                if (this.useOpenAI && this.isValidApiKey(this.openaiApiKey)) {
+                    this.addMessage('System', 'OpenAI integration ready. GPT-powered responses enabled.', 'system');
+                } else if (this.useOpenAI) {
+                    this.addMessage('System', 'OpenAI API key not configured. Using intelligent fallback responses.', 'system');
+                    this.useOpenAI = false;
+                    document.getElementById('openaiToggle').checked = false;
+                }
+
+                // Initialize HeyGen status
+                if (API_CONFIG.heygen.enabled && this.isValidApiKey(this.heygenApiKey)) {
+                    this.addMessage('System', 'HeyGen avatar integration ready. Enable avatar for visual experience.', 'system');
+                } else {
+                    this.addMessage('System', 'HeyGen API key not configured. Avatar will run in demo mode.', 'system');
+                }
+            }
+
+            isValidApiKey(apiKey) {
+                return apiKey && apiKey.trim() && !apiKey.includes('your-') && !apiKey.includes('-key-here');
+            }
+
+            async sendMessage() {
+                const message = this.chatInput.value.trim();
+                if (!message) return;
+
+                this.addMessage('You', message, 'user');
+                this.chatInput.value = '';
+                this.interactionCount++;
+                
+                // SCORM tracking
+                setSCORMValue(`cmi.interactions.${this.interactionCount}.id`, `interaction_${this.interactionCount}`);
+                setSCORMValue(`cmi.interactions.${this.interactionCount}.type`, 'other');
+                setSCORMValue(`cmi.interactions.${this.interactionCount}.description`, message);
+                setSCORMValue(`cmi.interactions.${this.interactionCount}.timestamp`, new Date().toISOString());
+
+                this.updateEngagementScore();
+                this.showTypingIndicator();
+
+                try {
+                    let response;
+                    if (this.useOpenAI && this.openaiApiKey) {
+                        response = await this.getOpenAIResponse(message);
+                    } else {
+                        // Use smart fallback responses with realistic delay
+                        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+                        response = getSmartResponse(message);
+                    }
+                    
+                    this.hideTypingIndicator();
+                    this.addMessage('AI Assistant', response, 'ai');
+                    
+                    if (this.isAvatarEnabled) {
+                        await this.speakResponse(response);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error getting response:', error);
+                    this.hideTypingIndicator();
+                    this.addMessage('AI Assistant', 'I apologize, but I encountered an error. Let me try again with a different approach.', 'ai');
+                }
+            }
+
+            async getOpenAIResponse(message) {
+                // Validate API key first
+                if (!this.isValidApiKey(this.openaiApiKey)) {
+                    console.log('OpenAI API key not configured, using fallback responses');
+                    return getSmartResponse(message);
+                }
+
+                try {
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.openaiApiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'gpt-3.5-turbo',
+                            messages: [
+                                {
+                                    role: 'system',
+                                    content: 'You are a helpful and friendly AI assistant in an educational SCORM chatbot. Be conversational, informative, and engaging. Keep responses concise but helpful. Focus on learning and education topics when possible.'
+                                },
+                                ...this.messages.filter(m => m.sender !== 'System').slice(-5).map(m => ({
+                                    role: m.sender === 'You' ? 'user' : 'assistant',
+                                    content: m.text
+                                })),
+                                {
+                                    role: 'user',
+                                    content: message
+                                }
+                            ],
+                            max_tokens: 150,
+                            temperature: 0.7
+                        })
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            console.error('OpenAI API key invalid');
+                            this.useOpenAI = false;
+                            document.getElementById('openaiToggle').checked = false;
+                            this.addMessage('System', 'OpenAI API key invalid. Switched to fallback responses.', 'system');
+                        }
+                        throw new Error(`OpenAI API error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.choices[0].message.content;
+                } catch (error) {
+                    console.error('OpenAI API error:', error);
+                    // Fall back to smart responses
+                    return getSmartResponse(message);
+                }
+            }
+
+            addMessage(sender, text, type) {
+                const message = { sender, text, type, timestamp: new Date() };
+                this.messages.push(message);
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}-message`;
+                
+                const time = message.timestamp.toLocaleTimeString();
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <strong>${sender}</strong>
+                        <span class="message-time">${time}</span>
+                    </div>
+                    <div class="message-content">${text}</div>
+                `;
+
+                this.chatMessages.appendChild(messageDiv);
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+
+            showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message ai-message typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                typingDiv.innerHTML = `
+                    <div class="message-header">
+                        <strong>AI Assistant</strong>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                `;
+                this.chatMessages.appendChild(typingDiv);
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
+            async enableAvatar() {
+                if (this.isConnecting) return;
+                
+                this.isConnecting = true;
+                this.avatarToggle.textContent = 'Connecting...';
+                this.avatarToggle.disabled = true;
+                this.updateConnectionStatus('Connecting...', 'connecting');
+                
+                try {
+                    await this.initializeSession();
+                    await this.createPeerConnection();
+                    this.isAvatarEnabled = true;
+                    this.avatarToggle.textContent = 'Disable Avatar';
+                    this.avatarToggle.disabled = false;
+                    this.updateConnectionStatus('Connected', 'connected');
+                    this.addMessage('System', 'Avatar enabled! Your responses will now include visual avatar.', 'system');
+                    
+                    setSCORMValue('cmi.suspend_data', JSON.stringify({
+                        avatarEnabled: true,
+                        interactionCount: this.interactionCount,
+                        timestamp: new Date().toISOString()
+                    }));
+                    
+                } catch (error) {
+                    console.error('Avatar connection failed:', error);
+                    this.updateConnectionStatus('Connection failed', 'error');
+                    this.avatarToggle.textContent = 'Enable Avatar';
+                    this.avatarToggle.disabled = false;
+                    this.addMessage('System', `Avatar connection failed: ${error.message}. Please check your API key and try again.`, 'system');
+                } finally {
+                    this.isConnecting = false;
+                }
+            }
+
+            async disableAvatar() {
+                this.isAvatarEnabled = false;
+                this.avatarToggle.textContent = 'Enable Avatar';
+                this.avatarToggle.disabled = false;
+                this.updateConnectionStatus('Offline', 'disconnected');
+                
+                if (this.peerConnection) {
+                    this.peerConnection.close();
+                    this.peerConnection = null;
+                }
+                
+                if (this.videoElement) {
+                    this.videoElement.srcObject = null;
+                    this.videoElement.style.display = 'none';
+                }
+                
+                const placeholder = document.querySelector('.avatar-placeholder-mini');
+                if (placeholder) {
+                    placeholder.style.display = 'flex';
+                    placeholder.textContent = 'Avatar preview';
+                }
+                this.addMessage('System', 'Avatar disabled.', 'system');
+            }
+
+            async initializeSession() {
+                // Check if we have a valid HeyGen API key
+                if (!this.isValidApiKey(this.heygenApiKey)) {
+                    // Use demo mode if no valid API key
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    this.sessionToken = 'demo-token';
+                    this.addMessage('System', 'Avatar running in demo mode (API key not configured).', 'system');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('https://api.heygen.com/v1/streaming.create_token', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Api-Key': this.heygenApiKey
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to create session: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    if (data.code !== 100) {
+                        throw new Error(data.message || 'Failed to initialize session');
+                    }
+
+                    this.sessionToken = data.data.token;
+                    this.addMessage('System', 'Avatar session created successfully!', 'system');
+                } catch (error) {
+                    console.error('HeyGen API error:', error);
+                    // Fallback to demo mode
+                    this.sessionToken = 'demo-token';
+                    this.addMessage('System', 'Avatar connection failed, using demo mode.', 'system');
+                }
+            }
+
+            async createPeerConnection() {
+                if (this.sessionToken === 'demo-token') {
+                    this.videoElement.style.display = 'none';
+                    const placeholder = document.querySelector('.avatar-placeholder-mini');
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                        placeholder.textContent = 'Demo Mode Active';
+                    }
+                    return;
+                }
+
+                const pc = new RTCPeerConnection({
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' }
+                    ]
+                });
+
+                pc.ontrack = (event) => {
+                    console.log('Received video track');
+                    if (event.streams && event.streams[0]) {
+                        this.videoElement.srcObject = event.streams[0];
+                        this.videoElement.style.display = 'block';
+                        const placeholder = document.querySelector('.avatar-placeholder-mini');
+                        if (placeholder) {
+                            placeholder.style.display = 'none';
+                        }
+                        this.videoElement.play().catch(e => console.error('Video play error:', e));
+                    }
+                };
+
+                pc.oniceconnectionstatechange = () => {
+                    console.log('ICE connection state:', pc.iceConnectionState);
+                };
+
+                const offer = await pc.createOffer({ offerToReceiveVideo: true, offerToReceiveAudio: true });
+                await pc.setLocalDescription(offer);
+
+                const response = await fetch('https://api.heygen.com/v1/streaming.start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.sessionToken}`
+                    },
+                    body: JSON.stringify({
+                        sdp: offer,
+                        avatar_id: this.avatarIdInput.value || 'josh_lite3_20230714',
+                        voice_id: this.voiceIdInput.value || '2d5b0e6cf36f460aa7fc47e3eee4ba54',
+                        background: '#00ff00'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to start streaming: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.code !== 100) {
+                    throw new Error(data.message || 'Failed to start streaming');
+                }
+
+                await pc.setRemoteDescription(data.data.sdp);
+                this.peerConnection = pc;
+            }
+
+            async speakResponse(text) {
+                if (!this.peerConnection || !this.sessionToken) return;
+
+                if (this.sessionToken === 'demo-token') {
+                    console.log('Demo mode: Avatar would speak:', text);
+                    return;
+                }
+
+                try {
+                    const response = await fetch('https://api.heygen.com/v1/streaming.task', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.sessionToken}`
+                        },
+                        body: JSON.stringify({
+                            text: text,
+                            task_type: 'talk'
+                        })
+                    });
+
+                    if (!response.ok) {
+                        console.error('Failed to send speech task:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Speech error:', error);
+                }
+            }
+
+            updateConnectionStatus(message, status) {
+                this.connectionStatus.textContent = message;
+                this.connectionStatus.className = `status ${status}`;
+            }
+
+            updateEngagementScore() {
+                const timeSpent = (Date.now() - this.startTime) / 1000;
+                const avatarBonus = this.isAvatarEnabled ? 20 : 0;
+                
+                let baseScore = Math.min(50, this.interactionCount * 5);
+                let timeScore = Math.min(30, timeSpent / 60 * 10);
+                let engagementScore = Math.min(100, baseScore + timeScore + avatarBonus);
+                
+                this.engagementScore.textContent = `${Math.round(engagementScore)}%`;
+                
+                setSCORMValue('cmi.score.raw', Math.round(engagementScore).toString());
+                setSCORMValue('cmi.score.scaled', (engagementScore / 100).toString());
+                
+                if (engagementScore >= 70) {
+                    setSCORMValue('cmi.completion_status', 'completed');
+                    setSCORMValue('cmi.success_status', 'passed');
+                }
+            }
+        }
+
+        // Chat Widget Toggle Functionality
+        function initializeChatWidget() {
+            const chatToggleBtn = document.getElementById('chatToggleBtn');
+            const chatPopup = document.getElementById('chatPopup');
+            const chatCloseBtn = document.getElementById('chatCloseBtn');
+            
+            // Open chat popup
+            chatToggleBtn.addEventListener('click', function() {
+                chatPopup.classList.add('open');
+                chatToggleBtn.style.display = 'none';
+            });
+            
+            // Close chat popup
+            chatCloseBtn.addEventListener('click', function() {
+                chatPopup.classList.remove('open');
+                chatToggleBtn.style.display = 'flex';
+            });
+            
+            // Close chat when clicking outside (optional)
+            document.addEventListener('click', function(event) {
+                if (!chatPopup.contains(event.target) && !chatToggleBtn.contains(event.target)) {
+                    if (chatPopup.classList.contains('open')) {
+                        chatPopup.classList.remove('open');
+                        chatToggleBtn.style.display = 'flex';
+                    }
+                }
+            });
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing SCORM Chatbot...');
+            
+            // Initialize chat widget toggle functionality
+            initializeChatWidget();
+            
+            initializeSCORM();
+            const chatbot = new AvatarChatbot();
+            
+            setTimeout(() => {
+                if (API_CONFIG.openai.enabled && chatbot.isValidApiKey(API_CONFIG.openai.apiKey)) {
+                    chatbot.addMessage('AI Assistant', 'Hello! Welcome to the AI Avatar Chatbot with integrated OpenAI. I\'m powered by GPT and ready to help you learn and explore. You can also enable the avatar for a fully interactive experience. What would you like to know?', 'ai');
+                } else {
+                    chatbot.addMessage('AI Assistant', 'Hello! Welcome to the AI Avatar Chatbot. I\'m here to help you learn and explore using intelligent responses. Configure the API keys in the code for enhanced AI features. You can enable the avatar for a more interactive experience. What would you like to know?', 'ai');
+                }
+            }, 500);
+            
+            window.addEventListener('beforeunload', function() {
+                terminateSCORM();
+            });
+        });
+    </script>
+</body>
+</html> 

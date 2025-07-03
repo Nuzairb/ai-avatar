@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="com.example.scormchatwidget"
+          version="1.0"
+          xmlns="http://www.imsglobal.org/xsd/imscp_v1p1"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1
+          imscp_v1p1.xsd
+          http://www.adlnet.org/xsd/adlcp_v1p3
+          adlcp_v1p3.xsd">
+  <organizations default="org1">
+    <organization identifier="org1">
+      <title>AI Avatar Chat Widget</title>
+      <item identifier="item1" identifierref="resource1">
+        <title>AI Avatar Chat Widget</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="resource1"
+              type="webcontent"
+              adlcp:scormType="sco"
+              href="scorm-chat-widget.html">
+      <file href="scorm-chat-widget.html"/>
+      <file href="index.css"/>
+      <file href="scorm-api.js"/>
+      <file href="scorm-wrapper.js"/>
+      <file href="favicon.ico"/>
+      <!-- Add more <file href="..."/> lines for any other assets or folders -->
+    </resource>
+  </resources>
+</manifest> 

@@ -89,10 +89,20 @@ class AvatarChatbot {
     this.showTyping(true);
     this.sendBtn.disabled = true;
 
+    // SCORM Tracking: Track user message
+    if (window.chatbotSCORM) {
+      window.chatbotSCORM.trackUserMessage(message);
+    }
+
     try {
       // Get AI response
       const aiResponse = await this.getAIResponse(message);
       this.addMessage('bot', aiResponse);
+      
+      // SCORM Tracking: Track AI response
+      if (window.chatbotSCORM) {
+        window.chatbotSCORM.trackAIResponse(aiResponse);
+      }
       
       // Make avatar speak if enabled
       if (this.avatarEnabled && this.sessionInfo) {
@@ -198,6 +208,11 @@ class AvatarChatbot {
       this.toggleAvatarBtn.textContent = 'Disable Avatar';
       this.toggleAvatarBtn.classList.add('enabled');
       this.updateAvatarStatus('Connected');
+      
+      // SCORM Tracking: Track avatar enabled
+      if (window.chatbotSCORM) {
+        window.chatbotSCORM.trackAvatarEnabled();
+      }
       this.hideElement(this.avatarPlaceholder);
       this.showElement(this.mediaElement);
       
@@ -246,6 +261,11 @@ class AvatarChatbot {
       this.hideElement(this.canvasElement);
       this.hideElement(this.avatarControls);
       this.showElement(this.avatarPlaceholder);
+      
+      // SCORM Tracking: Track avatar disabled
+      if (window.chatbotSCORM) {
+        window.chatbotSCORM.trackAvatarDisabled();
+      }
       
     } catch (error) {
       console.error('Error disabling avatar:', error);

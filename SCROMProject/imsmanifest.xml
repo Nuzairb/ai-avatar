@@ -98,8 +98,6 @@
       <file href="scormcontent/assets/hotel-policy-documents-and-guides-for-the-staff.jpg" />
 
       <file href="scormcontent/locales/en.js" />
-      <file href="scormcontent/lib/chatbot/chatbot.js" />
-      <file href="scormcontent/lib/chatbot/chatbot.css" />
     </resource>
   </resources>
 </manifest>

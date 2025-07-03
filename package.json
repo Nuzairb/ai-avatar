@@ -1,13 +1,29 @@
 {
-  "name": "streamingavatar",
+  "name": "ai-avatar-chatbot-scorm",
   "version": "1.0.0",
-  "description": "## Pre-Requisites",
+  "description": "AI Avatar Chatbot with SCORM integration for Learning Management Systems",
   "main": "index.js",
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "start": "node server.js",
+    "scorm": "node create-scorm-package.js",
+    "scorm-launcher": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ai",
+    "chatbot",
+    "avatar",
+    "scorm",
+    "e-learning",
+    "lms"
+  ],
+  "author": "AI Avatar Chatbot Team",
   "license": "ISC",
   "dependencies": {
+    "@heygen/streaming-avatar": "^2.0.16",
+    "archiver": "^6.0.2",
     "express": "^4.21.2",
+    "livekit-client": "^2.14.0",
     "openai": "^4.104.0"
   },
   "devDependencies": {
